@@ -75,6 +75,10 @@ mod functions;
 
 pub use base::no_overlap;
 
+mod display;
+mod display_helpers;
+mod from_str;
+
 use core::fmt;
 use std::error;
 
@@ -83,29 +87,59 @@ use serde::{Deserialize, Serialize};
 
 /// Represents a two-word floating point type, represented as the sum of two
 /// non-overlapping f64 values.
-#[derive(Debug, Default, Clone, Copy, PartialEq, PartialOrd)]
+#[derive(Default, Clone, Copy, PartialEq, PartialOrd)]
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde_support", serde(try_from = "(f64, f64)"))]
 #[cfg_attr(feature = "serde_support", serde(into = "(f64, f64)"))]
 pub struct TwoFloat {
-    pub(crate) hi: f64,
-    pub(crate) lo: f64,
+  pub(crate) hi: f64,
+  pub(crate) lo: f64,
 }
 
 /// The error type for `TwoFloat` operations.
 #[non_exhaustive]
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum TwoFloatError {
-    /// Indicates invalid conversion to/from `TwoFloat`
-    ConversionError,
+  /// Indicates invalid conversion to/from `TwoFloat`
+  ConversionError,
+  /// Indicated the format of a parsed string is not a valid number
+  ParseInvalidFormat,
+  /// Indicates attempt to parse an empty string
+  ParseEmptyString,
 }
 
 impl fmt::Display for TwoFloatError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Self::ConversionError => write!(f, "invalid TwoFloat conversion"),
-        }
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    match self {
+      Self::ConversionError => write!(f, "invalid TwoFloat conversion"),
+      Self::ParseInvalidFormat => write!(f, "provided string is not a valid number"),
+      Self::ParseEmptyString => write!(f, "provided string is empty"),
     }
+  }
 }
 
 impl error::Error for TwoFloatError {}
+
+/// Creates a new double-double from another number or from a string.
+///
+/// The argument can be any expression that evaluates to a type that this library
+/// defines a `From` implementation for. This includes `&str`, `Double`, any primitive
+/// number that is not a `u128` or `i128`, and 2-tuples of any of those primitive number
+/// types.
+///
+/// # Examples
+/// ```
+/// # use qd::{dd, Double};
+/// assert!(dd!(0) == Double::ZERO);
+///
+/// let x = dd!(1) / dd!(2).sqrt();
+/// let expected = dd!("0.70710678118654752440084436210485");
+/// let diff = (x - expected).abs();
+/// assert!(diff < dd!(1e-30));
+/// ```
+#[macro_export]
+macro_rules! dd {
+  ($x:expr) => {
+    $crate::TwoFloat::from($x)
+  };
+}

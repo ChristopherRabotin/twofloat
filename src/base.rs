@@ -130,110 +130,126 @@ impl TwoFloat {
         hi: f64::NAN,
         lo: f64::NAN,
     };
-}
 
-impl fmt::Display for TwoFloat {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let sign_char = if self.lo().is_sign_positive() {
-            '+'
-        } else {
-            '-'
-        };
-        if f.sign_plus() {
-            match f.precision() {
-                Some(p) => write!(
-                    f,
-                    "{:+.*} {} {:.*}",
-                    p,
-                    self.hi,
-                    sign_char,
-                    p,
-                    self.lo.abs()
-                ),
-                None => write!(f, "{:+} {} {}", self.hi, sign_char, self.lo.abs()),
-            }
-        } else {
-            match f.precision() {
-                Some(p) => write!(f, "{:.*} {} {:.*}", p, self.hi, sign_char, p, self.lo.abs()),
-                None => write!(f, "{} {} {}", self.hi, sign_char, self.lo.abs()),
-            }
-        }
+    /// Returns `true` if the `TwoFloat` is `NaN`.
+    ///
+    /// This is the proper way to test for `NaN` because it cannot be done with an equality
+    /// test (since `NaN` is not equal to itself).
+    ///
+    /// # Examples
+    /// ```
+    /// # use qd::{dd, TwoFloat};
+    /// assert!(TwoFloat::NAN.is_nan());
+    /// assert!(!dd!(7.0).is_nan());
+    /// ```
+    #[inline]
+    pub fn is_nan(self) -> bool {
+        self.hi.is_nan()
     }
 }
 
-impl fmt::LowerExp for TwoFloat {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let sign_char = if self.lo().is_sign_positive() {
-            '+'
-        } else {
-            '-'
-        };
-        if f.sign_plus() {
-            match f.precision() {
-                Some(p) => write!(
-                    f,
-                    "{:+.*e} {} {:.*e}",
-                    p,
-                    self.hi,
-                    sign_char,
-                    p,
-                    self.lo.abs()
-                ),
-                None => write!(f, "{:+e} {} {:e}", self.hi, sign_char, self.lo.abs()),
-            }
-        } else {
-            match f.precision() {
-                Some(p) => write!(
-                    f,
-                    "{:.*e} {} {:.*e}",
-                    p,
-                    self.hi,
-                    sign_char,
-                    p,
-                    self.lo.abs()
-                ),
-                None => write!(f, "{:e} {} {:e}", self.hi, sign_char, self.lo.abs()),
-            }
-        }
-    }
-}
+// impl fmt::Display for TwoFloat {
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         let sign_char = if self.lo().is_sign_positive() {
+//             '+'
+//         } else {
+//             '-'
+//         };
+//         if f.sign_plus() {
+//             match f.precision() {
+//                 Some(p) => write!(
+//                     f,
+//                     "{:+.*} {} {:.*}",
+//                     p,
+//                     self.hi,
+//                     sign_char,
+//                     p,
+//                     self.lo.abs()
+//                 ),
+//                 None => write!(f, "{:+} {} {}", self.hi, sign_char, self.lo.abs()),
+//             }
+//         } else {
+//             match f.precision() {
+//                 Some(p) => write!(f, "{:.*} {} {:.*}", p, self.hi, sign_char, p, self.lo.abs()),
+//                 None => write!(f, "{} {} {}", self.hi, sign_char, self.lo.abs()),
+//             }
+//         }
+//     }
+// }
 
-impl fmt::UpperExp for TwoFloat {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let sign_char = if self.lo().is_sign_positive() {
-            '+'
-        } else {
-            '-'
-        };
-        if f.sign_plus() {
-            match f.precision() {
-                Some(p) => write!(
-                    f,
-                    "{:+.*E} {} {:.*E}",
-                    p,
-                    self.hi,
-                    sign_char,
-                    p,
-                    self.lo.abs()
-                ),
-                None => write!(f, "{:+E} {} {:E}", self.hi, sign_char, self.lo.abs()),
-            }
-        } else {
-            match f.precision() {
-                Some(p) => write!(
-                    f,
-                    "{:.*E} {} {:.*E}",
-                    p,
-                    self.hi,
-                    sign_char,
-                    p,
-                    self.lo.abs()
-                ),
-                None => write!(f, "{:E} {} {:E}", self.hi, sign_char, self.lo.abs()),
-            }
-        }
-    }
-}
+// impl fmt::LowerExp for TwoFloat {
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         let sign_char = if self.lo().is_sign_positive() {
+//             '+'
+//         } else {
+//             '-'
+//         };
+//         if f.sign_plus() {
+//             match f.precision() {
+//                 Some(p) => write!(
+//                     f,
+//                     "{:+.*e} {} {:.*e}",
+//                     p,
+//                     self.hi,
+//                     sign_char,
+//                     p,
+//                     self.lo.abs()
+//                 ),
+//                 None => write!(f, "{:+e} {} {:e}", self.hi, sign_char, self.lo.abs()),
+//             }
+//         } else {
+//             match f.precision() {
+//                 Some(p) => write!(
+//                     f,
+//                     "{:.*e} {} {:.*e}",
+//                     p,
+//                     self.hi,
+//                     sign_char,
+//                     p,
+//                     self.lo.abs()
+//                 ),
+//                 None => write!(f, "{:e} {} {:e}", self.hi, sign_char, self.lo.abs()),
+//             }
+//         }
+//     }
+// }
+
+// impl fmt::UpperExp for TwoFloat {
+//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+//         let sign_char = if self.lo().is_sign_positive() {
+//             '+'
+//         } else {
+//             '-'
+//         };
+//         if f.sign_plus() {
+//             match f.precision() {
+//                 Some(p) => write!(
+//                     f,
+//                     "{:+.*E} {} {:.*E}",
+//                     p,
+//                     self.hi,
+//                     sign_char,
+//                     p,
+//                     self.lo.abs()
+//                 ),
+//                 None => write!(f, "{:+E} {} {:E}", self.hi, sign_char, self.lo.abs()),
+//             }
+//         } else {
+//             match f.precision() {
+//                 Some(p) => write!(
+//                     f,
+//                     "{:.*E} {} {:.*E}",
+//                     p,
+//                     self.hi,
+//                     sign_char,
+//                     p,
+//                     self.lo.abs()
+//                 ),
+//                 None => write!(f, "{:E} {} {:E}", self.hi, sign_char, self.lo.abs()),
+//             }
+//         }
+//     }
+// }
 
 impl PartialEq<f64> for TwoFloat {
     fn eq(&self, other: &f64) -> bool {

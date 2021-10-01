@@ -1,5 +1,7 @@
 use crate::TwoFloat;
 
+// Constants determined by Sollya
+
 /// Euler's number (e)
 pub const E: TwoFloat = TwoFloat {
     hi: 2.718281828459045,
@@ -112,6 +114,123 @@ pub const SQRT_2: TwoFloat = TwoFloat {
 pub const TAU: TwoFloat = TwoFloat {
     hi: 6.283185307179586,
     lo: 2.4492935982947064e-16,
+};
+
+// The trivial constants
+
+/// The radix or base of the internal representation of `TwoFloat`. This is the same as
+/// the representation in the underlying f64.
+pub const RADIX: u32 = 2;
+
+/// Number of significant digits in base 2.
+pub const MANTISSA_DIGITS: u32 = 106;
+
+/// Approximate number of significant digits in base 10.
+pub const DIGITS: u32 = 31;
+
+/// [Machine epsilon] value for `TwoFloat`.
+///
+/// This is the difference between `1.0` and the next largest representable number.
+///
+/// [Machine epsilon]: https://en.wikipedia.org/wiki/Machine_epsilon
+pub const EPSILON: TwoFloat = TwoFloat {
+    hi: 4.93038065763132e-32,
+    lo: 0.0,
+}; // 2^-104
+
+/// Smallest finite `TwoFloat` value.
+pub const MIN: TwoFloat = TwoFloat {
+    hi: -1.7976931348623157e308,
+    lo: -9.979201547673598e291,
+};
+
+/// Smallest positive normal `TwoFloat` value.
+pub const MIN_POSITIVE: TwoFloat = TwoFloat {
+    hi: 2.2250738585072014e-308,
+    lo: 0.0,
+};
+
+/// Largest finite `TwoFloat` value.
+pub const MAX: TwoFloat = TwoFloat {
+    hi: 1.7976931348623157e308,
+    lo: 9.979201547673598e291,
+};
+
+/// One greater than the minimum possible normal power of 2 exponent.
+pub const MIN_EXP: i32 = -1021;
+
+/// Maximum possible power of 2 exponent.
+pub const MAX_EXP: i32 = 1024;
+
+/// Minimum possible normal power of 10 exponent.
+pub const MIN_10_EXP: i32 = -307;
+
+/// Maximum possible power of 10 exponent.
+pub const MAX_10_EXP: i32 = 308;
+
+/// Not a Number (NaN).
+pub const NAN: TwoFloat = TwoFloat {
+    hi: f64::NAN,
+    lo: f64::NAN,
+};
+
+/// Infinity (∞).
+pub const INFINITY: TwoFloat = TwoFloat {
+    hi: f64::INFINITY,
+    lo: 0.0,
+};
+
+/// Negative infinity (-∞).
+pub const NEG_INFINITY: TwoFloat = TwoFloat {
+    hi: f64::NEG_INFINITY,
+    lo: 0.0,
+};
+
+/// Zero (0)
+pub const ZERO: TwoFloat = TwoFloat { hi: 0.0, lo: 0.0 };
+
+/// Negative zero (-0)
+pub const NEG_ZERO: TwoFloat = TwoFloat { hi: -0.0, lo: 0.0 };
+
+/// One (1)
+pub const ONE: TwoFloat = TwoFloat { hi: 1.0, lo: 0.0 };
+
+/// Negative one (-1)
+pub const NEG_ONE: TwoFloat = TwoFloat { hi: -1.0, lo: 0.0 };
+
+/// π/16
+/// WARNING: _Not_ computed by Sollya, so 2*FRAC_PI_8 != FRAC_PI_16
+pub const FRAC_PI_16: TwoFloat = TwoFloat {
+    hi: 1.9634954084936207e-1,
+    lo: 7.654042494670953e-18,
+};
+
+/// 3π/2
+/// WARNING: _Not_ computed by Sollya, might be inconsistent!
+pub const FRAC_3_PI_2: TwoFloat = TwoFloat {
+    hi: 4.71238898038469e0,
+    lo: 1.8369701987210292e-16,
+};
+
+/// 3π/4
+/// WARNING: _Not_ computed by Sollya, might be inconsistent!
+pub const FRAC_3_PI_4: TwoFloat = TwoFloat {
+    hi: 2.356194490192345e0,
+    lo: 9.184850993605146e-17,
+};
+
+/// 5π/4
+/// WARNING: _Not_ computed by Sollya, might be inconsistent!
+pub const FRAC_5_PI_4: TwoFloat = TwoFloat {
+    hi: 3.9269908169872414e0,
+    lo: 1.5308084989341908e-16,
+};
+
+/// 7π/4
+/// WARNING: _Not_ computed by Sollya, might be inconsistent!
+pub const FRAC_7_PI_4: TwoFloat = TwoFloat {
+    hi: 5.497787143782138e0,
+    lo: 2.143131898507869e-16,
 };
 
 #[cfg(test)]

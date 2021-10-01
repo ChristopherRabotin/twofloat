@@ -156,3 +156,18 @@ bigint_convert!(i128);
 bigint_convert!(i64);
 bigint_convert!(u128);
 bigint_convert!(u64);
+
+use std::str::FromStr;
+// impl TryFrom<&str> for TwoFloat {
+//     type Error = TwoFloatError;
+
+//     fn try_from(s: &str) -> Result<Self, Self::Error> {
+//         Self::from_str(s)
+//     }
+// }
+
+impl From<&str> for TwoFloat {
+    fn from(s: &str) -> Self {
+        Self::from_str(s).unwrap()
+    }
+}
